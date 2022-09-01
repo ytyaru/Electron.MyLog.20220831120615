@@ -1,6 +1,8 @@
 class SqliteDbLoader {
-    constructor() {
-        this.PATH_WASM = `lib/sql.js/1.7.0`
+    constructor(repo='mytestrepo/') {
+        //this.PATH_WASM = `lib/sql.js/1.7.0`
+        //this.PATH_WASM = ((repo) ? repo : '') + `lib/sql.js/1.7.0`
+        this.PATH_WASM = `${repo}lib/sql.js/1.7.0`
         this.SQL = null
         this.DB = null
     }

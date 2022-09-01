@@ -5,6 +5,34 @@ class SiteMaker { // GitHub Pages で稼働するようファイル作成する�
     async make() { // 初回にリモートリポジトリを作成するとき一緒に作成する
         console.log('----- make() start -----')
         await Promise.all([
+            this.#cp(`lib/`),
+            this.#cp(`js/util/`),
+            //this.#cp(`src/js/sns/`),
+            this.#cp(`js/sns/sns/`),
+            this.#cp(`js/sns/webmention/`),
+            this.#cp(`css/`),
+            this.#cp(`asset/`),
+            this.#cp(`db/mylog.db`),
+            window.myApi.cp(`src/js/app/github/export/index.html`, `dst/${this.setting.github.repo}/index.html`, {'recursive':true, 'preserveTimestamps':true}),
+            window.myApi.cp(`src/js/app/github/export/style.css`, `dst/${this.setting.github.repo}/css/style.css`, {'recursive':true, 'preserveTimestamps':true}),
+            window.myApi.cp(`src/js/app/github/export/main.js`, `dst/${this.setting.github.repo}/js/main.js`, {'recursive':true, 'preserveTimestamps':true}),
+            window.myApi.cp(`src/lib/sql.js/1.7.0/sql-wasm.min.js`, `dst/${this.setting.github.repo}/lib/sql.js/1.7.0/sql-wasm.min.js`, {'recursive':true, 'preserveTimestamps':true}),
+            window.myApi.cp(`src/lib/sql.js/1.7.0/sql-wasm.wasm`, `dst/${this.setting.github.repo}/lib/sql.js/1.7.0/sql-wasm.wasm`, {'recursive':true, 'preserveTimestamps':true}),
+            //this.#sqliteDbLoaderCode()
+            window.myApi.cp(`src/js/app/github/export/sqlite-db-loader.js`, `dst/${this.setting.github.repo}/lib/mylog/sqlite-db-loader.js`, {'recursive':true, 'preserveTimestamps':true}),
+            window.myApi.cp(`src/js/app/github/export/db-to-html.js`, `dst/${this.setting.github.repo}/lib/mylog/db-to-html.js`, {'recursive':true, 'preserveTimestamps':true}),
+            window.myApi.cp(`src/js/app/github/export/run_server.py`, `dst/${this.setting.github.repo}/run_server.py`, {'recursive':true, 'preserveTimestamps':true}),
+            window.myApi.cp(`src/js/app/github/export/server.sh`, `dst/${this.setting.github.repo}/server.sh`, {'recursive':true, 'preserveTimestamps':true}),
+            window.myApi.cp(`src/js/app/github/export/.gitignore`, `dst/${this.setting.github.repo}/.gitignore`, {'recursive':true, 'preserveTimestamps':true}),
+            this.#mpurseSendButtonCode(),
+            //window.myApi.cp(`src/js/sns/monacoin/mpurse-send-button.js`, `dst/${this.setting.github.repo}/lib/monacoin/mpurse-send-button.js`, {'recursive':true, 'preserveTimestamps':true})
+        // /tmp/work/Electron.MyLog.20220831120615/src/lib/party/party.min.js
+            window.myApi.cp(`src/lib/party/party.min.js`, `dst/${this.setting.github.repo}/lib/party/party.min.js`, {'recursive':true, 'preserveTimestamps':true}),
+            window.myApi.cp(`src/js/util/party-sparkle-hart.js`, `dst/${this.setting.github.repo}/lib/monacoin/party-sparkle-image.js`, {'recursive':true, 'preserveTimestamps':true}),
+            window.myApi.cp(`src/js/util/party-sparkle-image.js`, `dst/${this.setting.github.repo}/lib/monacoin/party-sparkle-hart.js`, {'recursive':true, 'preserveTimestamps':true}),
+        ])
+        /*
+        await Promise.all([
             await this.#cp(`lib/`),
             await this.#cp(`js/util/`),
             //await this.#cp(`src/js/sns/`),
@@ -13,27 +41,6 @@ class SiteMaker { // GitHub Pages で稼働するようファイル作成する�
             await this.#cp(`css/`),
             await this.#cp(`asset/`),
             await this.#cp(`db/mylog.db`),
-            /*
-            await this.#cp(`src/lib/`),
-            await this.#cp(`src/js/util/`),
-            //await this.#cp(`src/js/sns/`),
-            await this.#cp(`src/js/sns/sns/`),
-            await this.#cp(`src/js/sns/webmention/`),
-            await this.#cp(`src/css/`),
-            await this.#cp(`src/asset/`),
-            await this.#cp(`src/db/`),
-            */
-            /*
-            await this.#cp(`src/js/util/caser.js`),
-            await this.#cp(`src/js/util/comment.js`),
-            await this.#cp(`src/js/util/date-format.js`),
-            await this.#cp(`src/js/util/elapsed-time.js`),
-            await this.#cp(`src/js/util/loading.js`),
-            await this.#cp(`src/js/util/party-sparkle-hart.js`),
-            await this.#cp(`src/js/util/party-sparkle-image.js`),
-            await this.#cp(`src/js/util/rest-client.js`),
-            await this.#cp(`src/js/util/toaster.js`),
-            */
         ])
         //await this.#indexCode()
         await window.myApi.cp(`src/js/app/github/export/index.html`, `dst/${this.setting.github.repo}/index.html`, {'recursive':true, 'preserveTimestamps':true})
@@ -41,8 +48,8 @@ class SiteMaker { // GitHub Pages で稼働するようファイル作成する�
         await window.myApi.cp(`src/js/app/github/export/main.js`, `dst/${this.setting.github.repo}/js/main.js`, {'recursive':true, 'preserveTimestamps':true})
         await window.myApi.cp(`src/lib/sql.js/1.7.0/sql-wasm.min.js`, `dst/${this.setting.github.repo}/lib/sql.js/1.7.0/sql-wasm.min.js`, {'recursive':true, 'preserveTimestamps':true})
         await window.myApi.cp(`src/lib/sql.js/1.7.0/sql-wasm.wasm`, `dst/${this.setting.github.repo}/lib/sql.js/1.7.0/sql-wasm.wasm`, {'recursive':true, 'preserveTimestamps':true})
-        await this.#sqliteDbLoaderCode()
-        //await window.myApi.cp(`src/js/app/github/export/sqlite-db-loader.js`, `dst/${this.setting.github.repo}/lib/mylog/sqlite-db-loader.js`, {'recursive':true, 'preserveTimestamps':true})
+        //await this.#sqliteDbLoaderCode()
+        await window.myApi.cp(`src/js/app/github/export/sqlite-db-loader.js`, `dst/${this.setting.github.repo}/lib/mylog/sqlite-db-loader.js`, {'recursive':true, 'preserveTimestamps':true})
         await window.myApi.cp(`src/js/app/github/export/db-to-html.js`, `dst/${this.setting.github.repo}/lib/mylog/db-to-html.js`, {'recursive':true, 'preserveTimestamps':true})
         await window.myApi.cp(`src/js/app/github/export/run_server.py`, `dst/${this.setting.github.repo}/run_server.py`, {'recursive':true, 'preserveTimestamps':true})
         await window.myApi.cp(`src/js/app/github/export/server.sh`, `dst/${this.setting.github.repo}/server.sh`, {'recursive':true, 'preserveTimestamps':true})
@@ -50,28 +57,10 @@ class SiteMaker { // GitHub Pages で稼働するようファイル作成する�
 
         await this.#mpurseSendButtonCode()
         //await window.myApi.cp(`src/js/sns/monacoin/mpurse-send-button.js`, `dst/${this.setting.github.repo}/lib/monacoin/mpurse-send-button.js`, {'recursive':true, 'preserveTimestamps':true})
+        // /tmp/work/Electron.MyLog.20220831120615/src/lib/party/party.min.js
+        await window.myApi.cp(`src/lib/party/party.min.js`, `dst/${this.setting.github.repo}/lib/party/party.min.js`, {'recursive':true, 'preserveTimestamps':true})
         await window.myApi.cp(`src/js/util/party-sparkle-hart.js`, `dst/${this.setting.github.repo}/lib/monacoin/party-sparkle-image.js`, {'recursive':true, 'preserveTimestamps':true})
         await window.myApi.cp(`src/js/util/party-sparkle-image.js`, `dst/${this.setting.github.repo}/lib/monacoin/party-sparkle-hart.js`, {'recursive':true, 'preserveTimestamps':true})
-
-        /*
-        await window.myApi.cp(`src/lib/toastify/1.11.2/min.js`, `dst/${this.setting.github.repo}/lib/toastify/1.11.2/min.js`, {'recursive':true, 'preserveTimestamps':true})
-        await window.myApi.cp(`src/lib/toastify/1.11.2/min.css`, `dst/${this.setting.github.repo}/lib/toastify/1.11.2/min.css`, {'recursive':true, 'preserveTimestamps':true})
-        await window.myApi.cp(`src/lib/`, `dst/${this.setting.github.repo}/lib/`, {'recursive':true, 'preserveTimestamps':true})
-        await window.myApi.cp(`src/lib/`, `dst/${this.setting.github.repo}/lib/`, {'recursive':true, 'preserveTimestamps':true})
-        await window.myApi.cp(`src/lib/`, `dst/${this.setting.github.repo}/lib/`, {'recursive':true, 'preserveTimestamps':true})
-        await window.myApi.cp(`src/lib/`, `dst/${this.setting.github.repo}/lib/`, {'recursive':true, 'preserveTimestamps':true})
-        await window.myApi.cp(`src/lib/`, `dst/${this.setting.github.repo}/lib/`, {'recursive':true, 'preserveTimestamps':true})
-        */
-        /*
-<script src="lib/toastify/1.11.2/min.js"></script>
-<script src="lib/party/party.min.js"></script>
-<script src="lib/sql.js/1.7.0/sql-wasm.min.js"></script>
-<script src="lib/monacoin/mpurse-send-button.js"></script>
-<script src="lib/monacoin/party-sparkle-image.js"></script>
-<script src="lib/monacoin/party-sparkle-hart.js"></script>
-<script src="lib/mylog/sqlite-db-loader.js"></script>
-<script src="lib/mylog/db-to-html.js"></script>
-<script src="js/main.js"></script>
         */
         //await this.#cp(`src/lib/toastify/1.11.2/min.css`)
         //await this.#cp(`test`) // 存在しない
@@ -87,7 +76,8 @@ class SiteMaker { // GitHub Pages で稼働するようファイル作成する�
         //const isFile = await window.myApi.isFile(src) // Uncaught (in promise) Error: Error invoking remote method 'isFile': Error: ENOENT: no such file or directory, lstat 'test'
         //console.log(`isFile: ${isFile}`)
         //await window.myApi.cp(path, `dst/${this.setting.github.repo}/${path}`, {'recursive':true, 'preserveTimestamps':true})
-        await window.myApi.cp(src, dst, {'recursive':true, 'preserveTimestamps':true})
+        //await window.myApi.cp(src, dst, {'recursive':true, 'preserveTimestamps':true})
+        window.myApi.cp(src, dst, {'recursive':true, 'preserveTimestamps':true})
         //if (isFile) { await this.#cpfile(path) }
         //else { await this.#cpdir(path) } // ディレクトリとみなす
     }
@@ -103,10 +93,11 @@ class SiteMaker { // GitHub Pages で稼働するようファイル作成する�
         console.debug(this.setting.mona.address)
         //code = new TextEncoder().encode(code.replace(/MEHCqJbgiNERCH3bRAtNSSD9uxPViEX1nu/g, this.setting.mona.address))
         code = code.replace(/MEHCqJbgiNERCH3bRAtNSSD9uxPViEX1nu/g, this.setting.mona.address)
-        code = code.replace(/\'\.\/src\/asset\/image\/monacoin\/\'/g, `'./${this.setting.github.repo}/asset/image/monacoin/'`)
+        //code = code.replace(/\'\.\/src\/asset\/image\/monacoin\/\'/g, `'./${this.setting.github.repo}/asset/image/monacoin/'`)
         console.debug(code)
         // なぜか事前にawait this.#cp(`src/js/sns/`),しコピーファイルがあると上書きされない
-        await window.myApi.writeFile(`${dstDir}/${file}`, code)
+        //await window.myApi.writeFile(`${dstDir}/${file}`, code)
+        window.myApi.writeFile(`${dstDir}/${file}`, code)
     }
     /*
     async #indexCode() { // GitHubリポジトリ名をURLにぶちこむ
@@ -130,7 +121,8 @@ class SiteMaker { // GitHub Pages で稼働するようファイル作成する�
         let code = await window.myApi.readTextFile(`${srcDir}/${file}`)
         code = code.replace(/mytestrepo/g, this.setting.github.repo)
         console.debug(code)
-        await window.myApi.writeFile(`${dstDir}/${file}`, code)
+        //await window.myApi.writeFile(`${dstDir}/${file}`, code)
+        window.myApi.writeFile(`${dstDir}/${file}`, code)
     }
     //async #cpfile(path) { await window.myApi.cpfile(path, `dst/${this.setting.github.repo}/${path}`) }
     //async #cpdir(path) { await window.myApi.cpdir(path, `dst/${this.setting.github.repo}/${path}`, {'recursive':true, 'preserveTimestamps':true}) }
